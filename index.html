@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Belajar Online – MTS Matholiul Huda Bugel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0a0f1e;
+  --surface:#111827;
+  --surface2:#1a2235;
+  --accent:#4f8ef7;
+  --accent2:#a78bfa;
+  --gold:#f5c842;
+  --green:#34d399;
+  --red:#f87171;
+  --text:#f0f4ff;
+  --muted:#8899b4;
+  --border:rgba(79,142,247,0.15);
+  --radius:14px;
+  --radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* === BACKGROUND STARS === */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(79,142,247,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(167,139,250,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(10,15,30,0) 0%, var(--bg) 100%);
+  z-index:0;
+  pointer-events:none;
+}
+
+/* === LAYOUT === */
+#app{
+  position:relative;
+  z-index:1;
+  max-width:780px;
+  margin:0 auto;
+  padding:0 1rem 4rem;
+}
+
+/* === HEADER === */
+.header{
+  text-align:center;
+  padding:2.5rem 0 2rem;
+  position:relative;
+}
+.logo-circle{
+  width:72px;height:72px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;
+  font-size:28px;font-weight:800;color:#fff;
+  margin:0 auto 1rem;
+  box-shadow:0 0 32px rgba(79,142,247,0.35);
+  animation:pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 0 32px rgba(79,142,247,0.35)}
+  50%{box-shadow:0 0 56px rgba(79,142,247,0.6)}
+}
+.school-name{
+  font-family:'Syne',sans-serif;
+  font-size:1.1rem;font-weight:700;
+  color:var(--accent);
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.school-sub{
+  font-size:0.8rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;
+}
+.divider{
+  width:60px;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  margin:1rem auto;border-radius:2px;
+}
+
+/* === SCREEN === */
+.screen{display:none;animation:fadeUp 0.35s ease}
+.screen.active{display:block}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* === CARD === */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.25rem 1.5rem;
+  margin-bottom:1rem;
+}
+.card-glow{
+  box-shadow:0 0 0 1px var(--border), 0 8px 32px rgba(79,142,247,0.08);
+}
+
+/* === SECTION LABEL === */
+.section-label{
+  font-size:11px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;
+}
+
+/* === SELECTOR BUTTONS === */
+.sel-grid{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;
+}
+.sel-btn{
+  cursor:pointer;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  color:var(--muted);
+  border-radius:var(--radius-sm);
+  padding:7px 16px;
+  font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;
+  transition:all 0.18s;
+}
+.sel-btn:hover{border-color:var(--accent);color:var(--accent)}
+.sel-btn.active{
+  background:rgba(79,142,247,0.12);
+  border-color:var(--accent);
+  color:var(--accent);
+  box-shadow:0 0 12px rgba(79,142,247,0.2);
+}
+
+/* === MAIN BUTTONS === */
+.btn{
+  cursor:pointer;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  color:var(--text);
+  border-radius:var(--radius-sm);
+  padding:10px 20px;
+  font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;
+  transition:all 0.18s;display:inline-flex;align-items:center;gap:6px;
+}
+.btn:hover{background:var(--surface);border-color:var(--accent)}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;color:#fff;
+  box-shadow:0 4px 20px rgba(79,142,247,0.3);
+}
+.btn-primary:hover{
+  box-shadow:0 6px 28px rgba(79,142,247,0.5);
+  transform:translateY(-1px);
+}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-group{display:flex;gap:10px;flex-wrap:wrap}
+
+/* === QUIZ HEADER === */
+.quiz-top{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;flex-wrap:wrap;gap:8px;
+}
+.badge{
+  display:inline-block;font-size:11px;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+}
+.badge-kelas{background:rgba(79,142,247,0.15);color:var(--accent)}
+.badge-mapel{background:rgba(167,139,250,0.15);color:var(--accent2)}
+.q-num{font-size:13px;color:var(--muted)}
+.q-timer{
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+  color:var(--accent);min-width:40px;text-align:right;
+}
+.q-timer.danger{color:var(--red)}
+
+/* === TIMER BAR === */
+.timer-bar{
+  height:4px;border-radius:2px;
+  background:rgba(255,255,255,0.06);
+  margin-bottom:1.25rem;overflow:hidden;
+}
+.timer-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width 0.5s linear,background 0.3s;
+}
+.timer-fill.danger{background:linear-gradient(90deg,#f87171,#f5c842)}
+
+/* === QUESTION TEXT === */
+.q-text{
+  font-size:16px;line-height:1.7;
+  color:var(--text);font-weight:400;
+  margin-bottom:1.25rem;
+}
+
+/* === OPTIONS === */
+.opt-btn{
+  cursor:pointer;
+  width:100%;border:1px solid var(--border);
+  background:var(--surface2);
+  color:var(--text);border-radius:var(--radius-sm);
+  padding:11px 14px;
+  font-size:14px;font-family:'DM Sans',sans-serif;
+  text-align:left;display:flex;align-items:flex-start;gap:12px;
+  transition:all 0.18s;margin-bottom:8px;
+}
+.opt-btn:hover:not(:disabled){
+  background:rgba(79,142,247,0.08);
+  border-color:var(--accent);
+}
+.opt-btn:disabled{cursor:default}
+.opt-letter{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
+  min-width:22px;height:22px;border-radius:50%;
+  background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.opt-btn.correct{
+  background:rgba(52,211,153,0.1);
+  border-color:var(--green);
+}
+.opt-btn.correct .opt-letter{background:var(--green);color:#0a0f1e}
+.opt-btn.wrong{
+  background:rgba(248,113,113,0.1);
+  border-color:var(--red);
+}
+.opt-btn.wrong .opt-letter{background:var(--red);color:#0a0f1e}
+.opt-btn.reveal{
+  background:rgba(79,142,247,0.1);
+  border-color:var(--accent);
+}
+.opt-btn.reveal .opt-letter{background:var(--accent);color:#fff}
+
+/* === EXPLANATION === */
+.explain-box{
+  border-left:3px solid var(--accent);
+  background:rgba(79,142,247,0.06);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:10px 14px;
+  font-size:13px;color:var(--muted);
+  margin-top:12px;line-height:1.6;
+  animation:fadeUp 0.25s ease;
+}
+
+/* === RESULT STATS === */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;
+  margin-bottom:1.5rem;
+}
+.stat-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:1rem;text-align:center;
+}
+.stat-val{
+  font-family:'Syne',sans-serif;font-size:26px;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* === SAVE FORM === */
+.save-row{display:flex;gap:8px;margin-top:10px}
+.save-row input{
+  flex:1;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:9px 14px;
+  font-size:14px;font-family:'DM Sans',sans-serif;
+  color:var(--text);
+  outline:none;
+  transition:border-color 0.18s;
+}
+.save-row input:focus{border-color:var(--accent)}
+.save-row input::placeholder{color:var(--muted)}
+
+/* === LEADERBOARD === */
+.lb-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+  font-size:14px;
+}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{
+  font-family:'Syne',sans-serif;font-weight:800;
+  min-width:32px;font-size:15px;color:var(--muted);
+}
+.lb-rank.gold{color:var(--gold)}
+.lb-rank.silver{color:#c0c0c0}
+.lb-rank.bronze{color:#cd7f32}
+.lb-info{flex:1}
+.lb-name{font-weight:500;color:var(--text)}
+.lb-meta{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:0.03em}
+.lb-score{
+  font-family:'Syne',sans-serif;font-weight:700;
+  color:var(--accent);font-size:16px;
+}
+
+/* === EMPTY STATE === */
+.empty{
+  text-align:center;padding:3rem 1rem;
+  color:var(--muted);font-size:14px;
+}
+.empty .icon{font-size:40px;margin-bottom:1rem}
+
+/* === WATERMARK === */
+.watermark{
+  position:fixed;
+  bottom:16px;right:16px;
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(79,142,247,0.35);
+  user-select:none;pointer-events:none;z-index:999;
+}
+
+/* === PROGRESS BAR === */
+.progress-bar{
+  display:flex;gap:3px;margin-bottom:1.25rem;
+}
+.progress-dot{
+  flex:1;height:4px;border-radius:2px;
+  background:rgba(255,255,255,0.06);transition:background 0.3s;
+}
+.progress-dot.done{background:var(--accent)}
+.progress-dot.current{background:var(--accent2)}
+
+/* === HOME HERO === */
+.home-hero{
+  text-align:center;padding:0 0 1.5rem;
+}
+.hero-title{
+  font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;
+  line-height:1.2;margin-bottom:0.5rem;
+}
+.hero-title span{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-desc{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* === NAV TABS === */
+.nav-tabs{
+  display:flex;gap:4px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:4px;margin-bottom:1.5rem;
+}
+.nav-tab{
+  flex:1;cursor:pointer;
+  border:none;background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;
+  padding:8px;border-radius:6px;
+  transition:all 0.18s;
+}
+.nav-tab.active{
+  background:rgba(79,142,247,0.15);
+  color:var(--accent);
+}
+.nav-tab:hover:not(.active){color:var(--text)}
+
+/* === MAPEL ICON GRID === */
+.mapel-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;
+  margin-bottom:1.25rem;
+}
+.mapel-btn{
+  cursor:pointer;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  border-radius:var(--radius-sm);
+  padding:14px 8px 10px;
+  text-align:center;font-family:'DM Sans',sans-serif;
+  transition:all 0.18s;
+}
+.mapel-btn:hover{border-color:var(--accent)}
+.mapel-btn.active{
+  background:rgba(79,142,247,0.1);
+  border-color:var(--accent);
+  box-shadow:0 0 12px rgba(79,142,247,0.15);
+}
+.mapel-icon{font-size:22px;margin-bottom:6px}
+.mapel-label{font-size:11px;font-weight:500;color:var(--muted);line-height:1.3}
+.mapel-btn.active .mapel-label{color:var(--accent)}
+
+/* === CONFETTI SCORE === */
+.score-ring{
+  width:110px;height:110px;
+  border-radius:50%;
+  background:conic-gradient(var(--accent) 0% calc(var(--p,0)*1%), var(--surface2) calc(var(--p,0)*1%) 100%);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.25rem;
+  position:relative;
+}
+.score-ring::before{
+  content:'';position:absolute;inset:8px;
+  border-radius:50%;background:var(--surface);
+}
+.score-ring-val{
+  position:relative;z-index:1;
+  font-family:'Syne',sans-serif;font-size:26px;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+@media(max-width:480px){
+  .hero-title{font-size:1.5rem}
+  .mapel-grid{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-circle">MH</div>
+  <div class="school-name">MTS Matholiul Huda Bugel</div>
+  <div class="school-sub">Platform Belajar Online</div>
+  <div class="divider"></div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="home-hero">
+    <div class="hero-title">Latihan Soal <span>MTS</span></div>
+    <p class="hero-desc">100+ soal pilihan ganda · Kelas 7–9 · 8 Mata Pelajaran<br>Timer, pembahasan, dan papan peringkat tersedia!</p>
+  </div>
+
+  <div class="card card-glow">
+    <div class="section-label">Pilih Kelas</div>
+    <div class="sel-grid" id="kelas-list"></div>
+
+    <div class="section-label">Mata Pelajaran</div>
+    <div class="mapel-grid" id="mapel-list"></div>
+
+    <div class="section-label">Jumlah Soal</div>
+    <div class="sel-grid" id="jumlah-list"></div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="mulaiKuis()">&#9654; Mulai Latihan</button>
+    <button class="btn btn-sm" onclick="showScreen('leaderboard')">&#127942; Papan Peringkat</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="kuis" class="screen">
+  <div class="quiz-top">
+    <div style="display:flex;gap:6px">
+      <span class="badge badge-kelas" id="q-kelas"></span>
+      <span class="badge badge-mapel" id="q-mapel"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span class="q-num" id="q-num"></span>
+      <span class="q-timer" id="q-timer">30s</span>
+    </div>
+  </div>
+  <div class="timer-bar"><div class="timer-fill" id="timer-fill"></div></div>
+  <div class="progress-bar" id="progress-bar"></div>
+
+  <div class="card card-glow">
+    <p class="q-text" id="q-text"></p>
+    <div id="opts"></div>
+    <div id="explain" style="display:none" class="explain-box"></div>
+  </div>
+
+  <div class="btn-group" style="margin-top:6px">
+    <button class="btn btn-primary btn-sm" id="btn-next" style="display:none" onclick="nextSoal()">Soal Berikutnya &#8594;</button>
+    <button class="btn btn-sm" onclick="konfirmKeluar()">&#8592; Keluar</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="screen">
+  <div class="card card-glow" style="text-align:center;padding:2rem 1.5rem">
+    <div class="section-label" style="text-align:center">Hasil Latihan</div>
+    <div class="score-ring" id="score-ring">
+      <span class="score-ring-val" id="ring-val">0</span>
+    </div>
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--muted);margin-bottom:1.5rem" id="r-grade"></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="r-benar"></div><div class="stat-lbl">Benar</div></div>
+      <div class="stat-card"><div class="stat-val" id="r-salah"></div><div class="stat-lbl">Salah</div></div>
+      <div class="stat-card"><div class="stat-val" id="r-waktu"></div><div class="stat-lbl">Rata-rata waktu</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Simpan ke Papan Peringkat</div>
+    <div class="save-row">
+      <input type="text" id="nama-input" placeholder="Masukkan namamu..." maxlength="20"/>
+      <button class="btn btn-primary btn-sm" onclick="simpanScore()">Simpan</button>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary btn-sm" onclick="showScreen('home')">&#8592; Menu Utama</button>
+    <button class="btn btn-sm" onclick="showScreen('leaderboard')">&#127942; Papan Peringkat</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800">Papan Peringkat</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Top 20 skor tertinggi</div>
+    </div>
+    <button class="btn btn-sm" onclick="showScreen('home')">&#8592; Kembali</button>
+  </div>
+  <div class="card card-glow" id="lb-content"></div>
+</div>
+
+</div>
+
+<!-- WATERMARK -->
+<div class="watermark">bykanzzcoding</div>
+
+<script>
+const KELAS=['Kelas 7','Kelas 8','Kelas 9'];
+const MAPEL_DEF=[
+  {label:'Matematika',icon:'📐'},
+  {label:'Bhs. Indonesia',icon:'📖'},
+  {label:'IPA',icon:'🔬'},
+  {label:'IPS',icon:'🌏'},
+  {label:'Bhs. Inggris',icon:'🇬🇧'},
+  {label:'PKn',icon:'🏛️'},
+  {label:'Agama',icon:'🌙'},
+  {label:'Fiqih',icon:'📿'},
+];
+const JUMLAH=[10,20,30];
+
+const SOAL={
+  'Matematika':[
+    {q:'Hasil dari 2³ × 3² adalah...',o:['72','36','48','54'],a:0,e:'2³=8, 3²=9, 8×9=72.'},
+    {q:'FPB dari 24 dan 36 adalah...',o:['6','8','12','4'],a:2,e:'Faktor persekutuan terbesar 24 dan 36 adalah 12.'},
+    {q:'Luas persegi panjang dengan panjang 8 cm dan lebar 5 cm adalah...',o:['26 cm²','40 cm²','13 cm²','20 cm²'],a:1,e:'Luas = p × l = 8 × 5 = 40 cm².'},
+    {q:'Nilai dari √144 adalah...',o:['11','14','12','13'],a:2,e:'√144 = 12 karena 12 × 12 = 144.'},
+    {q:'Pecahan 3/4 jika diubah ke persen adalah...',o:['65%','70%','80%','75%'],a:3,e:'3/4 × 100% = 75%.'},
+    {q:'Jika x + 7 = 15, maka x = ...',o:['7','8','9','6'],a:1,e:'x = 15 − 7 = 8.'},
+    {q:'Keliling lingkaran dengan jari-jari 7 cm (π = 22/7) adalah...',o:['44 cm','22 cm','88 cm','66 cm'],a:0,e:'K = 2πr = 2 × 22/7 × 7 = 44 cm.'},
+    {q:'Hasil 15% × 200 adalah...',o:['25','30','35','40'],a:1,e:'15/100 × 200 = 30.'},
+    {q:'Sudut siku-siku besarnya...',o:['180°','90°','45°','60°'],a:1,e:'Sudut siku-siku = 90°.'},
+    {q:'Bilangan prima antara 10 dan 20 adalah...',o:['11, 13, 17, 19','11, 14, 17, 19','11, 13, 15, 19','12, 13, 17, 19'],a:0,e:'Bilangan prima: 11, 13, 17, 19.'},
+    {q:'KPK dari 4 dan 6 adalah...',o:['12','8','24','6'],a:0,e:'KPK = Kelipatan persekutuan terkecil dari 4 dan 6 = 12.'},
+    {q:'Volume kubus dengan sisi 5 cm adalah...',o:['25 cm³','100 cm³','125 cm³','75 cm³'],a:2,e:'V = s³ = 5³ = 125 cm³.'},
+  ],
+  'Bhs. Indonesia':[
+    {q:'Kalimat yang menggunakan kata baku yang benar adalah...',o:['Saya pergi ke apotik','Saya pergi ke apotek','Saya pergi ke afotek','Saya pergi ke apotEk'],a:1,e:'"Apotek" adalah ejaan baku, bukan "apotik".'},
+    {q:'Sinonim dari kata "rajin" adalah...',o:['Malas','Giat','Lamban','Santai'],a:1,e:'Sinonim rajin adalah giat.'},
+    {q:'Paragraf yang berisi gagasan utama di awal kalimat disebut...',o:['Paragraf ineratif','Paragraf campuran','Paragraf deduktif','Paragraf induktif'],a:2,e:'Paragraf deduktif = kalimat utama di awal.'},
+    {q:'Kata "berlari" terdiri dari...',o:['Awalan ber- + lari','Awalan be- + rlari','Awalan berl- + ari','Tidak ada imbuhan'],a:0,e:'"Berlari" = awalan ber- + kata dasar lari.'},
+    {q:'Antonim dari kata "hemat" adalah...',o:['Irit','Pelit','Boros','Kikir'],a:2,e:'Antonim hemat adalah boros.'},
+    {q:'Tanda baca yang digunakan di akhir kalimat tanya adalah...',o:['Titik (.)','Koma (,)','Tanda tanya (?)','Tanda seru (!)'],a:2,e:'Kalimat tanya diakhiri tanda tanya (?).'},
+    {q:'Jenis teks yang bertujuan meyakinkan pembaca disebut...',o:['Teks deskripsi','Teks narasi','Teks persuasi','Teks eksposisi'],a:2,e:'Teks persuasi = meyakinkan/membujuk pembaca.'},
+    {q:'Kalimat majemuk setara ditandai konjungsi...',o:['Karena, sehingga','Dan, atau, tetapi','Jika, maka','Walaupun, meskipun'],a:1,e:'Konjungsi koordinatif: dan, atau, tetapi.'},
+    {q:'"Tangan dingin" merupakan contoh majas...',o:['Personifikasi','Hiperbola','Metonimia','Metafora'],a:3,e:'"Tangan dingin" = perumpamaan langsung = metafora.'},
+    {q:'Paragraf induktif adalah paragraf yang kalimat utamanya berada di...',o:['Awal','Akhir','Tengah','Tidak punya'],a:1,e:'Paragraf induktif = kalimat utama di akhir.'},
+  ],
+  'IPA':[
+    {q:'Zat yang dihasilkan tumbuhan dalam proses fotosintesis adalah...',o:['CO2 dan air','O2 dan glukosa','H2O dan mineral','N2 dan protein'],a:1,e:'Fotosintesis menghasilkan O2 dan glukosa.'},
+    {q:'Hewan yang berkembang biak dengan cara bertelur disebut...',o:['Vivipar','Ovovivipar','Ovipar','Amfibi'],a:2,e:'Ovipar = bertelur. Contoh: ayam, burung.'},
+    {q:'Bagian sel yang mengatur semua kegiatan sel adalah...',o:['Mitokondria','Inti sel (nukleus)','Ribosom','Vakuola'],a:1,e:'Nukleus adalah pusat kendali sel.'},
+    {q:'Perubahan es menjadi air disebut...',o:['Membeku','Menguap','Mencair','Menyublim'],a:2,e:'Padat → cair disebut mencair.'},
+    {q:'Magnet dapat menarik benda yang terbuat dari...',o:['Plastik dan kayu','Besi dan baja','Karet dan kaca','Tembaga dan aluminium'],a:1,e:'Magnet menarik besi, baja, nikel, dan kobalt.'},
+    {q:'Lapisan ozon berfungsi untuk...',o:['Menghasilkan oksigen','Menyerap sinar ultraviolet','Menjaga suhu bumi','Menghasilkan hujan'],a:1,e:'Lapisan ozon melindungi bumi dari sinar UV.'},
+    {q:'Sistem organ yang berfungsi mencerna makanan adalah...',o:['Sistem sirkulasi','Sistem ekskresi','Sistem pencernaan','Sistem pernapasan'],a:2,e:'Sistem pencernaan mengolah makanan menjadi nutrisi.'},
+    {q:'Perpindahan panas melalui zat perantara tanpa zat berpindah disebut...',o:['Konveksi','Konduksi','Radiasi','Induksi'],a:1,e:'Konduksi = perpindahan panas tanpa pergerakan zat.'},
+    {q:'Planet yang paling dekat dengan matahari adalah...',o:['Venus','Bumi','Merkurius','Mars'],a:2,e:'Urutan planet: Merkurius, Venus, Bumi, Mars...'},
+    {q:'Rumus kimia air adalah...',o:['CO2','H2O','NaCl','O2'],a:1,e:'Air = H2O.'},
+  ],
+  'IPS':[
+    {q:'Proklamasi kemerdekaan Indonesia dibacakan pada tanggal...',o:['16 Agustus 1945','17 Agustus 1945','18 Agustus 1945','15 Agustus 1945'],a:1,e:'Proklamasi dibacakan 17 Agustus 1945.'},
+    {q:'Ibu kota negara Indonesia adalah...',o:['Surabaya','Bandung','Jakarta','Bali'],a:2,e:'Jakarta adalah ibu kota Indonesia.'},
+    {q:'Pulau terbesar di Indonesia adalah...',o:['Sumatra','Jawa','Kalimantan','Papua'],a:2,e:'Kalimantan adalah pulau terbesar di Indonesia.'},
+    {q:'Kegiatan ekonomi yang mengolah bahan mentah menjadi barang jadi disebut...',o:['Distribusi','Konsumsi','Produksi','Industri'],a:3,e:'Industri mengolah bahan mentah menjadi barang jadi.'},
+    {q:'Pendiri ASEAN terdiri dari berapa negara?',o:['4','5','6','7'],a:1,e:'ASEAN didirikan 5 negara: Indonesia, Malaysia, Singapura, Thailand, Filipina (1967).'},
+    {q:'Mata uang Jepang adalah...',o:['Yuan','Won','Yen','Ringgit'],a:2,e:'Mata uang Jepang adalah Yen (¥).'},
+    {q:'Benua yang paling luas di dunia adalah...',o:['Amerika','Afrika','Eropa','Asia'],a:3,e:'Asia adalah benua terluas.'},
+    {q:'Suku Jawa banyak terdapat di pulau...',o:['Sumatra','Kalimantan','Jawa','Sulawesi'],a:2,e:'Suku Jawa mendiami Pulau Jawa.'},
+    {q:'Lembaga yang menerbitkan uang rupiah adalah...',o:['BRI','Kemenkeu','Bank Indonesia','OJK'],a:2,e:'Bank Indonesia berwenang menerbitkan uang.'},
+    {q:'Negara yang berbatasan langsung di utara Kalimantan adalah...',o:['Filipina','Vietnam','Malaysia saja','Brunei dan Malaysia'],a:3,e:'Kalimantan berbatasan dengan Malaysia dan Brunei di utara.'},
+  ],
+  'Bhs. Inggris':[
+    {q:'What is the plural form of "child"?',o:['Childs','Children','Childrens','Childer'],a:1,e:'"Children" adalah bentuk jamak dari "child".'},
+    {q:'She ___ to school every day.',o:['go','goes','going','gone'],a:1,e:'Subject "She" (orang ketiga tunggal) + goes.'},
+    {q:'"Big" has the opposite meaning of...',o:['Large','Huge','Small','Tall'],a:2,e:'Antonim "big" adalah "small".'},
+    {q:'The correct greeting for the morning is...',o:['Good evening','Good night','Good afternoon','Good morning'],a:3,e:'"Good morning" digunakan di pagi hari.'},
+    {q:'I ___ a student.',o:['am','is','are','be'],a:0,e:'Subject "I" selalu menggunakan "am".'},
+    {q:'What does "beautiful" mean in Indonesian?',o:['Jelek','Cantik / Indah','Kecil','Besar'],a:1,e:'"Beautiful" artinya cantik atau indah.'},
+    {q:'The past tense of "eat" is...',o:['Eated','Eaten','Ate','Eating'],a:2,e:'Bentuk past tense "eat" adalah "ate".'},
+    {q:'Which sentence is correct?',o:["She don't like cats","She doesn't like cats","She not like cats","She no like cats"],a:1,e:'Orang ketiga tunggal: "doesn\'t".'},
+    {q:'What time is "three o\'clock"?',o:["It's 3:00","It's 3:15","It's 3:30","It's 3:45"],a:0,e:'"Three o\'clock" = pukul 3:00 tepat.'},
+    {q:'"Library" in Indonesian means...',o:['Toko buku','Perpustakaan','Kantin','Laboratorium'],a:1,e:'"Library" artinya perpustakaan.'},
+  ],
+  'PKn':[
+    {q:'Dasar negara Indonesia adalah...',o:['UUD 1945','Pancasila','GBHN','TAP MPR'],a:1,e:'Pancasila adalah dasar negara Indonesia.'},
+    {q:'Sila ke-3 Pancasila berbunyi...',o:['Ketuhanan Yang Maha Esa','Kemanusiaan yang adil','Persatuan Indonesia','Kerakyatan yang dipimpin'],a:2,e:'Sila ke-3: Persatuan Indonesia.'},
+    {q:'Lembaga legislatif di Indonesia adalah...',o:['Presiden','DPR/MPR','Mahkamah Agung','KPU'],a:1,e:'DPR dan MPR adalah lembaga legislatif.'},
+    {q:'Hak asasi manusia adalah hak yang...',o:['Diberikan oleh negara','Diberikan presiden','Dibawa sejak lahir','Diberikan hukum'],a:2,e:'HAM melekat pada diri manusia sejak lahir.'},
+    {q:'UUD 1945 disahkan pada tanggal...',o:['16 Agustus 1945','18 Agustus 1945','17 Agustus 1945','1 Juni 1945'],a:1,e:'UUD 1945 disahkan PPKI pada 18 Agustus 1945.'},
+    {q:'Semboyan negara Indonesia adalah...',o:['Bhinneka Tunggal Ika','Pancasila','Garuda Pancasila','NKRI Harga Mati'],a:0,e:'"Bhinneka Tunggal Ika" = berbeda-beda tetapi satu.'},
+    {q:'Pemilihan umum di Indonesia diadakan setiap...',o:['3 tahun','4 tahun','5 tahun','6 tahun'],a:2,e:'Pemilu diadakan setiap 5 tahun sekali.'},
+    {q:'Kewajiban warga negara terhadap lingkungan adalah...',o:['Mencemari lingkungan','Menjaga kebersihan','Buang sampah sembarangan','Menebang hutan'],a:1,e:'Kewajiban kita menjaga kelestarian lingkungan.'},
+    {q:'Presiden Indonesia dipilih oleh...',o:['DPR','MPR','Rakyat langsung','Mahkamah Agung'],a:2,e:'Sejak 2004, presiden dipilih langsung rakyat.'},
+    {q:'Bunyi sila pertama Pancasila adalah...',o:['Persatuan Indonesia','Ketuhanan Yang Maha Esa','Kemanusiaan yang adil','Keadilan sosial'],a:1,e:'Sila 1: Ketuhanan Yang Maha Esa.'},
+  ],
+  'Agama':[
+    {q:'Rukun Islam terdiri dari berapa perkara?',o:['4','5','6','7'],a:1,e:'Rukun Islam ada 5: syahadat, salat, zakat, puasa, haji.'},
+    {q:'Nabi terakhir yang diutus Allah adalah...',o:['Nabi Isa','Nabi Musa','Nabi Ibrahim','Nabi Muhammad SAW'],a:3,e:'Nabi Muhammad SAW adalah nabi terakhir.'},
+    {q:'Kitab suci umat Islam adalah...',o:['Injil','Taurat','Al-Quran','Zabur'],a:2,e:'Kitab suci Islam adalah Al-Quran.'},
+    {q:'Salat fardhu dalam sehari semalam ada berapa rakaat?',o:['15','17','19','21'],a:1,e:'Total rakaat salat 5 waktu = 17 rakaat.'},
+    {q:'Puasa Ramadan diwajibkan atas...',o:['Anak-anak','Muslim baligh dan mampu','Semua manusia','Hanya laki-laki'],a:1,e:'Puasa wajib bagi muslim baligh dan mampu.'},
+    {q:'Zakat fitrah wajib dibayar...',o:['Setiap bulan','Setiap hari raya Idul Adha','Sebelum salat Idul Fitri','Setelah salat Idul Fitri'],a:2,e:'Zakat fitrah dibayar sebelum salat Idul Fitri.'},
+    {q:'Berapa jumlah malaikat yang wajib diketahui?',o:['10','11','12','9'],a:0,e:'Malaikat yang wajib diketahui ada 10.'},
+    {q:'Iman kepada Allah termasuk dalam rukun...',o:['Rukun Islam','Rukun Iman','Rukun Salat','Rukun Wudu'],a:1,e:'Iman kepada Allah adalah rukun iman pertama.'},
+    {q:'Haji dilaksanakan di kota...',o:['Madinah','Jakarta','Mekah','Kairo'],a:2,e:'Haji dilaksanakan di Mekah, Arab Saudi.'},
+    {q:'Surat Al-Fatihah terdiri dari berapa ayat?',o:['5','6','7','8'],a:2,e:'Al-Fatihah terdiri dari 7 ayat.'},
+  ],
+  'Fiqih':[
+    {q:'Wudu menjadi batal karena...',o:['Makan dan minum','Tidur nyenyak','Berjalan','Berbicara'],a:1,e:'Tidur nyenyak (hilang kesadaran) membatalkan wudu.'},
+    {q:'Berikut yang termasuk syarat sah salat adalah...',o:['Memakai baju terbaik','Suci dari hadas','Salat di masjid','Salat berjamaah'],a:1,e:'Syarat sah salat: suci dari hadas besar dan kecil.'},
+    {q:'Hukum asal segala sesuatu dalam fiqih adalah...',o:['Haram','Mubah (boleh)','Makruh','Wajib'],a:1,e:'Kaidah fiqih: hukum asal = mubah kecuali ada dalil larangan.'},
+    {q:'Makanan yang halal dimakan oleh umat Islam adalah...',o:['Babi','Anjing','Ayam','Tikus'],a:2,e:'Ayam adalah hewan halal.'},
+    {q:'Salat 2 rakaat di waktu pagi hari adalah...',o:['Salat Zuhur','Salat Asar','Salat Subuh','Salat Magrib'],a:2,e:'Salat Subuh = 2 rakaat di waktu fajar.'},
+    {q:'Tayamum dilakukan sebagai pengganti wudu ketika...',o:['Malas wudu','Tidak ada air atau sakit','Air terlalu panas','Terburu-buru'],a:1,e:'Tayamum dilakukan saat tidak ada air atau sakit.'},
+    {q:'Zakat mal dikeluarkan sebesar...',o:['5%','10%','2,5%','20%'],a:2,e:'Zakat mal = 2,5% dari harta yang mencapai nisab.'},
+    {q:'Hukum membaca Al-Quran dengan tajwid adalah...',o:['Sunah','Mubah','Makruh','Wajib'],a:3,e:'Membaca Al-Quran dengan tajwid hukumnya wajib.'},
+    {q:'Jumlah rakaat salat Zuhur adalah...',o:['2','3','4','5'],a:2,e:'Salat Zuhur = 4 rakaat.'},
+    {q:'Niat salat diucapkan...',o:['Setelah takbir','Bersamaan dengan takbiratul ihram','Sebelum wudu','Setelah salam'],a:1,e:'Niat bersamaan dengan takbiratul ihram.'},
+  ]
+};
+
+let state={kelas:'Kelas 7',mapel:'Matematika',jumlah:10};
+let sesi={soal:[],idx:0,benar:0,totalWaktu:0,startTime:0,timerInterval:null,sisa:30};
+let leaderboard=JSON.parse(localStorage.getItem('lb_mts2')||'[]');
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='leaderboard')renderLB();
+}
+
+function renderSelectors(){
+  document.getElementById('kelas-list').innerHTML=KELAS.map(k=>`<button class="sel-btn${state.kelas===k?' active':''}" onclick="pilih('kelas','${k}',this)">${k}</button>`).join('');
+  document.getElementById('mapel-list').innerHTML=MAPEL_DEF.map(m=>`<button class="mapel-btn${state.mapel===m.label?' active':''}" onclick="pilihMapel('${m.label}',this)"><div class="mapel-icon">${m.icon}</div><div class="mapel-label">${m.label}</div></button>`).join('');
+  document.getElementById('jumlah-list').innerHTML=JUMLAH.map(j=>`<button class="sel-btn${state.jumlah===j?' active':''}" onclick="pilih('jumlah',${j},this)">${j} soal</button>`).join('');
+}
+
+function pilih(tipe,val,el){
+  state[tipe]=val;
+  el.closest('.sel-grid').querySelectorAll('.sel-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+function pilihMapel(val,el){
+  state.mapel=val;
+  document.querySelectorAll('.mapel-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function mulaiKuis(){
+  const pool=SOAL[state.mapel]||[];
+  if(!pool.length){alert('Soal belum tersedia!');return;}
+  const n=Math.min(state.jumlah,pool.length);
+  const shuffled=[...pool].sort(()=>Math.random()-0.5).slice(0,n);
+  sesi={soal:shuffled,idx:0,benar:0,totalWaktu:0,startTime:0,timerInterval:null,sisa:30};
+  document.getElementById('q-kelas').textContent=state.kelas;
+  document.getElementById('q-mapel').textContent=state.mapel;
+  showScreen('kuis');
+  renderProgress();
+  tampilSoal();
+}
+
+function renderProgress(){
+  const bar=document.getElementById('progress-bar');
+  bar.innerHTML=sesi.soal.map((_,i)=>`<div class="progress-dot${i<sesi.idx?' done':i===sesi.idx?' current':''}" id="pd-${i}"></div>`).join('');
+}
+
+function updateProgress(){
+  sesi.soal.forEach((_,i)=>{
+    const d=document.getElementById('pd-'+i);
+    if(!d)return;
+    d.className='progress-dot'+(i<sesi.idx?' done':i===sesi.idx?' current':'');
+  });
+}
+
+function tampilSoal(){
+  const s=sesi.soal[sesi.idx];
+  document.getElementById('q-num').textContent=`${sesi.idx+1} / ${sesi.soal.length}`;
+  document.getElementById('q-text').textContent=s.q;
+  document.getElementById('explain').style.display='none';
+  document.getElementById('btn-next').style.display='none';
+  const letters=['A','B','C','D'];
+  document.getElementById('opts').innerHTML=s.o.map((o,i)=>`<button class="opt-btn" onclick="pilihJawaban(${i})" id="opt-${i}"><span class="opt-letter">${letters[i]}</span><span>${o}</span></button>`).join('');
+  sesi.startTime=Date.now();
+  startTimer();
+  updateProgress();
+}
+
+function startTimer(){
+  clearInterval(sesi.timerInterval);
+  sesi.sisa=30;
+  updateTimerUI();
+  sesi.timerInterval=setInterval(()=>{
+    sesi.sisa--;
+    updateTimerUI();
+    if(sesi.sisa<=0){clearInterval(sesi.timerInterval);pilihJawaban(-1);}
+  },1000);
+}
+
+function updateTimerUI(){
+  const el=document.getElementById('q-timer');
+  const fill=document.getElementById('timer-fill');
+  el.textContent=sesi.sisa+'s';
+  el.className='q-timer'+(sesi.sisa<=10?' danger':'');
+  fill.style.width=(sesi.sisa/30*100)+'%';
+  fill.className='timer-fill'+(sesi.sisa<=10?' danger':'');
+}
+
+function pilihJawaban(idx){
+  clearInterval(sesi.timerInterval);
+  sesi.totalWaktu+=(Date.now()-sesi.startTime)/1000;
+  const s=sesi.soal[sesi.idx];
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  if(idx===s.a){
+    sesi.benar++;
+    if(document.getElementById('opt-'+idx))document.getElementById('opt-'+idx).classList.add('correct');
+  } else {
+    if(idx>=0&&document.getElementById('opt-'+idx))document.getElementById('opt-'+idx).classList.add('wrong');
+    document.getElementById('opt-'+s.a).classList.add('reveal');
+  }
+  const ex=document.getElementById('explain');
+  ex.textContent='💡 '+s.e;
+  ex.style.display='block';
+  const btn=document.getElementById('btn-next');
+  btn.style.display='inline-flex';
+  btn.textContent=sesi.idx<sesi.soal.length-1?'Soal Berikutnya →':'Lihat Hasil →';
+}
+
+function nextSoal(){
+  sesi.idx++;
+  if(sesi.idx>=sesi.soal.length){selesai();return;}
+  tampilSoal();
+}
+
+function selesai(){
+  const total=sesi.soal.length;
+  const skor=Math.round(sesi.benar/total*100);
+  const salah=total-sesi.benar;
+  const rataWaktu=(sesi.totalWaktu/total).toFixed(1);
+  let grade='';
+  if(skor>=90)grade='🏆 Luar Biasa!';
+  else if(skor>=75)grade='⭐ Bagus Sekali!';
+  else if(skor>=60)grade='👍 Cukup Baik';
+  else grade='📚 Perlu Belajar Lagi';
+  document.getElementById('ring-val').textContent=skor;
+  document.getElementById('score-ring').style.setProperty('--p',skor);
+  document.getElementById('r-grade').textContent=grade;
+  document.getElementById('r-benar').textContent=sesi.benar+'/'+total;
+  document.getElementById('r-salah').textContent=salah;
+  document.getElementById('r-waktu').textContent=rataWaktu+'s';
+  document.getElementById('nama-input').value='';
+  showScreen('result');
+}
+
+function simpanScore(){
+  const nama=document.getElementById('nama-input').value.trim();
+  if(!nama){alert('Masukkan namamu dulu!');return;}
+  const skor=parseInt(document.getElementById('ring-val').textContent);
+  leaderboard.push({nama,skor,mapel:state.mapel,kelas:state.kelas,tgl:new Date().toLocaleDateString('id-ID')});
+  leaderboard.sort((a,b)=>b.skor-a.skor);
+  if(leaderboard.length>50)leaderboard=leaderboard.slice(0,50);
+  try{localStorage.setItem('lb_mts2',JSON.stringify(leaderboard));}catch(e){}
+  showScreen('leaderboard');
+}
+
+function konfirmKeluar(){
+  if(confirm('Yakin mau keluar? Progress akan hilang.')){
+    clearInterval(sesi.timerInterval);
+    showScreen('home');
+  }
+}
+
+function renderLB(){
+  const el=document.getElementById('lb-content');
+  if(!leaderboard.length){
+    el.innerHTML='<div class="empty"><div class="icon">🏆</div><p>Belum ada data. Ayo mulai latihan!</p></div>';
+    return;
+  }
+  const rankClass=['gold','silver','bronze'];
+  const rankLabel=['🥇','🥈','🥉'];
+  el.innerHTML=leaderboard.slice(0,20).map((e,i)=>`
+    <div class="lb-row">
+      <div class="lb-rank ${rankClass[i]||''}">${rankLabel[i]||'#'+(i+1)}</div>
+      <div class="lb-info">
+        <div class="lb-name">${e.nama}</div>
+        <div class="lb-meta">${e.kelas} &middot; ${e.mapel} &middot; ${e.tgl}</div>
+      </div>
+      <div class="lb-score">${e.skor}</div>
+    </div>
+  `).join('');
+}
+
+renderSelectors();
+</script>
+</body>
+</html>
